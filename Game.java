@@ -51,7 +51,7 @@ public class Game implements Serializable {
     private boolean pickedFlower = false;
 
     /*
-    Menu screes set up.
+    Menu screens set up.
     The default Font that the renderFrame() uses is Monaco size 16.  Don't change the Font
     for drawing tiles because Monaco contains many unique chars that are used to build tiles
     that are not available in most Fonts.
