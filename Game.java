@@ -26,9 +26,7 @@ public class Game implements Serializable {
     private final int worldWidth = windowWidth;
     private final int worldHeight = windowHeight - 3;  //World height is smaller due to HUD.
     private TERenderer ter = new TERenderer();
-    private Random rand = new Random();  //rand is initialized with a seed later.
-    //Adjust to change room sizes.
-    private final int maxWall = rand.nextInt(10) + 5;
+    private Random rand;  //rand is initialized with a seed, same seed will produce the same world.
     private int dungeonWidth;
     ArrayList<TETile> walkableTiles = new ArrayList<>();
     private ArrayList<Enemy> firstWaveEnemies = new ArrayList<>();
@@ -54,10 +52,13 @@ public class Game implements Serializable {
     for drawing tiles because Monaco contains many unique chars that are used to build tiles.
     */
     private Font defaultFontFromRenderer = new Font("Monaco", Font.BOLD, 16);
-    private Font giantFont = new Font("Copperplate Gothic Bold", Font.BOLD, (windowHeight / 10) * 15);
+    private Font giantFont = new Font("Copperplate Gothic Bold", Font.BOLD,
+            (windowHeight / 10) * 15);
     private Font bigFont = new Font("Algerian", Font.BOLD, (windowHeight / 10) * 15);
-    private Font mediumFont = new Font("Copperplate Gothic Bold", Font.BOLD, (windowHeight / 20) * 16);
-    private Font smallFont = new Font("CopperPlate Gothic Bold", Font.BOLD, (windowHeight / 5) * 3);
+    private Font mediumFont = new Font("Copperplate Gothic Bold", Font.BOLD,
+            (windowHeight / 20) * 16);
+    private Font smallFont = new Font("CopperPlate Gothic Bold", Font.BOLD,
+            (windowHeight / 5) * 3);
     private int titleFirstLineY = windowHeight - (windowHeight / 15) * 2;
     private int titleSecondLineY = titleFirstLineY - (windowHeight / 15) * 2;
     private int menuLine1Y = (windowHeight / 20) * 15;
@@ -401,11 +402,11 @@ public class Game implements Serializable {
 
     //Adds the second wave of enemies when Link is getting close to the end of the quest.
     private void addSecondWaveEnemies() {
-        TETile[] creatures = new TETile[] {Tileset.SKULL, Tileset.GHOSTKING,
-                Tileset.REDGHOST, Tileset.SUNGHOST, Tileset.SPIDER};
+        TETile[] creatures = new TETile[] {Tileset.SKULL, Tileset.GHOSTKING, Tileset.REDGHOST,
+                Tileset.SUNGHOST, Tileset.SPIDER};
 
         for (int i = 0; i < creatures.length; i++) {
-            Enemy e = new Enemy(this, creatures[i], Tileset.CAVE, secondWaveLocations.get(i));
+            Enemy e = new Enemy(this, creatures[i], Tileset.CAVE, secondWaveLocations.get(i), rand);
             secondWaveEnemies.add(e);
         }
     }
@@ -562,6 +563,7 @@ public class Game implements Serializable {
         walkableTiles.add(Tileset.WINE);
 
         //Build the dungeon.
+        int maxWall = rand.nextInt(10) + 5;
         Structure dungeon = new Structure(world, rand, maxWall, dungeonWidth, worldHeight);
         dungeon.buildStructure();
 
@@ -730,12 +732,12 @@ public class Game implements Serializable {
 
             } else if (world[x][y].equals(Tileset.SKULL)) {  //Start SKULL in the dungeon.
                 Pair tmpLoc = new Pair(x, y);
-                Enemy skull = new Enemy(this, Tileset.SKULL, Tileset.FLOOR, tmpLoc);
+                Enemy skull = new Enemy(this, Tileset.SKULL, Tileset.FLOOR, tmpLoc, rand);
                 firstWaveEnemies.add(skull);
 
             } else if (world[x][y].equals(Tileset.SPIDER)) {  //Start GreenGhost in the dungeon.
                 Pair tmpLoc = new Pair(x, y);
-                Enemy greenGhost = new Enemy(this, Tileset.SPIDER, Tileset.FLOOR, tmpLoc);
+                Enemy greenGhost = new Enemy(this, Tileset.SPIDER, Tileset.FLOOR, tmpLoc, rand);
                 firstWaveEnemies.add(greenGhost);
             }
         }
@@ -771,15 +773,15 @@ public class Game implements Serializable {
             }
 
             if (world[x][y].equals(Tileset.SUNGHOST)) {
-                Enemy sunGhost = new Enemy(this, Tileset.SUNGHOST, Tileset.GRASS, tmpLoc);
+                Enemy sunGhost = new Enemy(this, Tileset.SUNGHOST, Tileset.GRASS, tmpLoc, rand);
                 firstWaveEnemies.add(sunGhost);
 
             } else if (world[x][y].equals(Tileset.GHOSTKING)) {
-                Enemy ghostKing = new Enemy(this, Tileset.GHOSTKING, Tileset.GRASS, tmpLoc);
+                Enemy ghostKing = new Enemy(this, Tileset.GHOSTKING, Tileset.GRASS, tmpLoc, rand);
                 firstWaveEnemies.add(ghostKing);
 
             } else  {
-                Enemy redGhost = new Enemy(this, Tileset.REDGHOST, Tileset.GRASS, tmpLoc);
+                Enemy redGhost = new Enemy(this, Tileset.REDGHOST, Tileset.GRASS, tmpLoc, rand);
                 firstWaveEnemies.add(redGhost);
             }
         }

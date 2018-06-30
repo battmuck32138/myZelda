@@ -16,14 +16,15 @@ public class Enemy implements Serializable {
     private char direction;
     private int numSteps;
     private int numLoops;
-    private Random rand = new Random();
+    private Random rand;
 
 
-    Enemy(Game game, TETile tile, TETile prevTile, Pair location) {
+    Enemy(Game game, TETile tile, TETile prevTile, Pair location, Random rand) {
         this.game = game;
         this.tile = tile;
         this.prevTile = prevTile;
         this.location = location;
+        this.rand = rand;
         this.numSteps = enemyBehavior();
         this.numLoops = game.enemySpeed;
     }
