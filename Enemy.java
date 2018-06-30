@@ -2,11 +2,12 @@ import java.io.Serializable;
 import java.util.Random;
 
 /*
-Enemy objects can be altered to have their own unique look
-and personality (movement behaviours).
+Enemies are 1 tile objects, each object can have its own unique appearance.
+Enemies move throughout the world changing direction randomly
+after x number of steps and when they hit walls. The enemy's speed is
+controlled by various features in the Game class.
  */
 public class Enemy implements Serializable {
-
     //Serialization number for Enemy class.
     private static final long serialVersionUID = 138189745210L;
     private Game game;
@@ -31,7 +32,7 @@ public class Enemy implements Serializable {
 
 
     /*
-    Moves the ghosts through the world randomly.
+    Moves the Enemy through the world changing direction at random.
     */
     public void moveEnemy() {
         int x = location.getX();

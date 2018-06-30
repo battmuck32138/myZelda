@@ -10,7 +10,8 @@ import edu.princeton.cs.introcs.StdDraw;
 
 /*
 My homage to the old NES Legend of Zelda Games.
-Tile based game that creates a unique world for each new game.
+Tile based game that creates a unique new world based on the seed that is
+entered by the user i.e. same seed means the user will get the same world.
 The worlds contain a dungeon structure that change drastically
 each time the game is played and a temple that changes it's size and location.
 Games can be saved and re-loaded again from the start menu by Serializing the game object.
@@ -18,6 +19,7 @@ Comment out all of the wavPlayer lines if you want to save a game.  JFrame is no
  */
 public class Game implements Serializable {
 
+    //World set up
     private static final long serialVersionUID = 1381L;  //Serialization number for Game class.
     private WavPlayer wavPlayer = new WavPlayer();  //Plays audio during game.
     private final int windowWidth = 96;  //96 is max for my laptop.
@@ -28,6 +30,8 @@ public class Game implements Serializable {
     private TERenderer ter = new TERenderer();
     private Random rand;  //rand is initialized with a seed, same seed will produce the same world.
     private int dungeonWidth;
+
+    //Moving Pieces set up
     ArrayList<TETile> walkableTiles = new ArrayList<>();
     private ArrayList<Enemy> firstWaveEnemies = new ArrayList<>();
     private ArrayList<Enemy> secondWaveEnemies = new ArrayList<>();
@@ -47,9 +51,10 @@ public class Game implements Serializable {
     private boolean pickedFlower = false;
 
     /*
-    Fonts and scale for menu screen texts.
+    Menu screes set up.
     The default Font that the renderFrame() uses is Monaco size 16.  Don't change the Font
-    for drawing tiles because Monaco contains many unique chars that are used to build tiles.
+    for drawing tiles because Monaco contains many unique chars that are used to build tiles
+    that are not available in most Fonts.
     */
     private Font defaultFontFromRenderer = new Font("Monaco", Font.BOLD, 16);
     private Font giantFont = new Font("Copperplate Gothic Bold", Font.BOLD,
