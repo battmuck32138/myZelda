@@ -15,8 +15,13 @@ entered by the user i.e. same seed means the user will get the same world.
 The worlds contain a dungeon structure that change drastically
 each time the game is played and a temple that changes it's size and location.
 Games can be saved and re-loaded again from the start menu by Serializing the game object.
-Comment out all of the wavPlayer lines if you want to save a game.  JFrame is not Serializable.
  */
+/*
+This game is a work in progress.
+The save game / load game options work fine but they have been
+temporarily disabled while I work on the audio WavPlayer
+(JFrame is not Serializable, looking at other options).
+*/
 public class Game implements Serializable {
 
     //World set up
@@ -79,7 +84,6 @@ public class Game implements Serializable {
     public void playGame() {
         //Renderer for the menu screen is full sized w*h.
         ter.initialize(windowWidth, windowHeight);
-        //Play menu theme music;
         wavPlayer.playSoundFile("songOfTime.wav");
         displayStartScreen(' ');
         solicitCommandFromUser();
@@ -111,11 +115,11 @@ public class Game implements Serializable {
                 }
             }
 
-            updateMouseLocation();  //Updates the HUD of the mouse moves.
+            updateMouseLocation();  //Updates the HUD as the mouse moves.
             drawEverything();
-            commandChar = ' ';  //update to a non-legal command until the next key stroke.
+            commandChar = ' ';  //Update to a non-legal command until the next key stroke.
 
-            if (slow > 0) {
+            if (slow > 0) {  //Slows down the game after Link drinks wine.
                 StdDraw.pause(100);
                 afterDrinkingSong();
                 slow--;
@@ -293,7 +297,7 @@ public class Game implements Serializable {
     //Returns true for a legal command, false otherwise.
     private boolean isLegalGameLoopCommand(char commandChar) {
         ArrayList<Character> legalInputChars = new ArrayList<>(Arrays.asList(
-                'w', 'W', 's', 'S', 'a', 'A', 'd', 'D', 'Q', 'q', ':'));
+                'u', 'U', 'j', 'J', 'h', 'H', 'k', 'K', 's', 'S', 'Q', 'q', ':'));
         return legalInputChars.contains(commandChar);
     }
 
@@ -428,14 +432,11 @@ public class Game implements Serializable {
         switch (commandChar) {
 
             case 'Q':  //Stop the game loop and go back to Main class.
-
-                //Quit is disabled for now, can't save, audio JFrame not Serializable.
-                //gameLoopOn = false;
-                //return;
-                break;
+                gameLoopOn = false;
+                return;
 
             //Next 4 cases move Link;
-            case 'W':  //north
+            case 'U':  //north
 
                 if (linkCanWalkHere('n')) {
                     nextStep = world[x][y + 1];
@@ -446,7 +447,7 @@ public class Game implements Serializable {
                 }
                 break;
 
-            case 'S':  //south
+            case 'J':  //south
 
                 if (linkCanWalkHere('s')) {
                     nextStep = world[x][y - 1];
@@ -457,7 +458,7 @@ public class Game implements Serializable {
                 }
                 break;
 
-            case 'A':  //west
+            case 'H':  //west
 
                 if (linkCanWalkHere('w')) {
                     nextStep = world[x - 1][y];
@@ -469,7 +470,7 @@ public class Game implements Serializable {
                 }
                 break;
 
-            case 'D':  //east
+            case 'K':  //east
 
                 if (linkCanWalkHere('e')) {
                     nextStep = world[x + 1][y];
@@ -863,7 +864,7 @@ public class Game implements Serializable {
         StdDraw.setFont(defaultFontFromRenderer);
         StdDraw.setPenColor(Color.GREEN);
         StdDraw.text((windowWidth / 10) * 9, windowHeight - 2,
-                ":Q Save   UP 'W'    DOWN 'S'    LEFT 'A'    RIGHT 'D'");
+                "UP 'U'    DOWN 'J'    LEFT 'H'    RIGHT 'K'   SAVE 'Q'");
         StdDraw.setPenColor(Color.white);
         StdDraw.text(3, windowHeight - 2, "ITEMS ");
         StdDraw.text((windowWidth / 10) * 6, windowHeight - 2,
@@ -933,7 +934,7 @@ public class Game implements Serializable {
         StdDraw.setPenColor(Color.YELLOW);
         StdDraw.text(worldWidth / 2, titleFirstLineY, "You Returned the TRIFORCE");
         StdDraw.text(worldWidth / 2, titleSecondLineY, "to Princess Zelda.");
-        StdDraw.text(worldWidth / 2, menuLine7Y, "Time to break out the elf wine!");
+        StdDraw.text(worldWidth / 2, menuLine7Y, "Time to celebrate!");
         //Display the menu frame.
         StdDraw.show();
         StdDraw.pause(600000);
